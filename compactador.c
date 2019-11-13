@@ -1,8 +1,8 @@
 #include "compactador.h"
+#include "bitmap.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 
 struct arv{
   char c;
@@ -60,6 +60,34 @@ int arv_pertence (Arv* a, char c){
     }
     else{
       return arv_pertence(a->esq, c) || arv_pertence(a->dir, c);
+    }
+  }
+}
+
+int eh_folha(Arv* a){
+  if(arv_vazia(a->esq) && arv_vazia(a->dir)){
+    return 1;
+  }
+  else{
+    return 0;
+  }
+}
+
+int arv_mapeia(Arv* a, bitmap* bm){
+  if (!arv_vazia(a)) {   
+    if(a->esq != NULL){
+      bitmapAppendLeastSignificantBit(bm, 0);
+      if(eh_folha(a) == 1){
+        bitmapSetBit(bm, bitmapGetLength(*bm)-1, a->c);
+      }
+      arv_mapeia(a->esq, bm);
+    }
+    if(a->dir != NULL){
+      bitmapAppendLeastSignificantBit(bm, 1);
+      if(eh_folha(a) == 1){
+        bitmapSetBit(bm, bitmapGetLength(*bm)-1, a->c);
+      }
+      arv_mapeia(a->dir, bm);
     }
   }
 }
@@ -168,6 +196,10 @@ TipoLista* LiberaLista (TipoLista* lista){
   }
   free(lista);
   return NULL;
+}
+
+Arv* RetornaArvoreOtima(TipoLista* lista){
+  return lista->inicio->arvore_lista;
 }
 //FIM DAS FUNCOES DE LISTA
 

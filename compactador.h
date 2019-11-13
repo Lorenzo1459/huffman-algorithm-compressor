@@ -1,5 +1,6 @@
 #ifndef COMPACTADOR_H_
 #define COMPACTADOR_H_
+#include "bitmap.h"
 
 typedef struct arv Arv;
 
@@ -11,6 +12,7 @@ void Insere_lista (Arv* arvore, TipoLista* lista);
 Arv* Retira_lista (TipoLista* lista, Arv* arv);
 void ImprimeLista (TipoLista* lista);
 TipoLista* LiberaLista (TipoLista* lista);
+Arv* RetornaArvoreOtima(TipoLista* lista);
 //FIM DAS FUNCOES DE LISTA
 
 //FUNCOES DE ARVORE
@@ -19,6 +21,8 @@ Arv* arv_cria (char c, int peso, Arv* e, Arv* d);
 Arv* arv_libera (Arv* a);
 int arv_vazia (Arv* a);
 int arv_pertence (Arv* a, char c);
+int eh_folha(Arv* a);
+int arv_mapeia(Arv* a, bitmap* bm);
 void arv_imprime (Arv* a);
 char info (Arv* a);
 int altura (Arv* a);
