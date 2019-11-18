@@ -74,21 +74,20 @@ int eh_folha(Arv* a){
 }
 
 int arv_mapeia(Arv* a, bitmap* bm){
-  if (!arv_vazia(a)) {   
+  if (!arv_vazia(a)) {
     if(a->esq != NULL){
       bitmapAppendLeastSignificantBit(bm, 0);
-      if(eh_folha(a) == 1){
-        bitmapSetBit(bm, bitmapGetLength(*bm)-1, a->c);
-      }
       arv_mapeia(a->esq, bm);
     }
     if(a->dir != NULL){
       bitmapAppendLeastSignificantBit(bm, 1);
-      if(eh_folha(a) == 1){
-        bitmapSetBit(bm, bitmapGetLength(*bm)-1, a->c);
-      }
       arv_mapeia(a->dir, bm);
     }
+    if(eh_folha(a)){
+      for(int i = 7; i >= 0; i--){
+        bitmapAppendLeastSignificantBit(bm, (a->c >> i) & 1); // dá append em cada bit do caractere de dado nó no bitmap
+      }
+    }    
   }
 }
 
