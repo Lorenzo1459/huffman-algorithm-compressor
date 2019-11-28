@@ -11,8 +11,6 @@ struct arv{
   Arv* dir;
 };
 
-typedef struct celula TCelula;
-
 struct celula{
   Arv* arvore_lista;
   TCelula* prox;
@@ -73,22 +71,22 @@ int eh_folha(Arv* a){
   }
 }
 
-int arv_mapeia(Arv* a, bitmap* bm){
+int arv_mapeia(Arv* a, bitmap* bm){  
   if (!arv_vazia(a)) {
     if(a->esq != NULL){
-      bitmapAppendLeastSignificantBit(bm, 0);
+      bitmapAppendLeastSignificantBit(bm, 0);      
       arv_mapeia(a->esq, bm);
     }
-    if(a->dir != NULL){
+    if(a->dir != NULL){      
       bitmapAppendLeastSignificantBit(bm, 1);
       arv_mapeia(a->dir, bm);
     }
-    if(eh_folha(a)){
+    if(eh_folha(a)){                  
       for(int i = 7; i >= 0; i--){
         bitmapAppendLeastSignificantBit(bm, (a->c >> i) & 1); // dá append em cada bit do caractere de dado nó no bitmap
       }
     }    
-  }
+  }  
 }
 
 void arv_imprime (Arv* a){
@@ -200,6 +198,44 @@ TipoLista* LiberaLista (TipoLista* lista){
 Arv* RetornaArvoreOtima(TipoLista* lista){
   return lista->inicio->arvore_lista;
 }
+
+TCelula* retorna_inicio_lista(TipoLista* lista){
+  return lista->inicio;
+}
+
+void bubbleSort(TCelula* comeco) 
+{ 
+    int trocou, i; 
+    TCelula *aux; 
+    TCelula *aux2 = NULL; 
+      
+    if (comeco == NULL) 
+        return;  
+    do
+    { 
+        trocou = 0; 
+        aux = comeco; 
+  
+        while (aux->prox != aux2) 
+        { 
+            if (aux->arvore_lista->peso > aux->prox->arvore_lista->peso) 
+            {  
+                troca(aux, aux->prox); 
+                trocou = 1; 
+            } 
+            aux = aux->prox; 
+        } 
+        aux2 = aux; 
+    } 
+    while (trocou); 
+} 
+  
+void troca(TCelula *a, TCelula *b) 
+{ 
+    int temp = a->arvore_lista->peso; 
+    a->arvore_lista->peso = b->arvore_lista->peso;
+    b->arvore_lista->peso = temp;
+} 
 //FIM DAS FUNCOES DE LISTA
 
 //FUNCOES ESPECIFICAS

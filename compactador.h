@@ -3,7 +3,7 @@
 #include "bitmap.h"
 
 typedef struct arv Arv;
-
+typedef struct celula TCelula;
 typedef struct lista TipoLista;
 
 //FUNCOES DE LISTA
@@ -13,6 +13,10 @@ Arv* Retira_lista (TipoLista* lista, Arv* arv);
 void ImprimeLista (TipoLista* lista);
 TipoLista* LiberaLista (TipoLista* lista);
 Arv* RetornaArvoreOtima(TipoLista* lista);
+TCelula* retorna_inicio_lista(TipoLista* lista);
+
+void bubbleSort(TCelula* comeco);
+void troca(TCelula *a, TCelula *b);
 //FIM DAS FUNCOES DE LISTA
 
 //FUNCOES DE ARVORE

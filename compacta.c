@@ -6,12 +6,14 @@
 
 
 int main(int argc, char const *argv[]) {
+  int n = 0;
   FILE* fp = fopen(argv[1],"r"); //abrindo arquivo
   int VetorASC[256] = {0}; //criando e inicializando com 0's um vetor das posicoes ascii
   char c; // aux do ponteiro de arquivo
 
   if (fp != NULL) {
     while ((c = fgetc(fp)) != EOF) { // percorrendo o arquivo
+      n++;
       printf("%c", c);
       unsigned char aux = c;
       VetorASC[aux]++; // aumentando o indice do caractere lido
@@ -29,6 +31,7 @@ int main(int argc, char const *argv[]) {
     }
   }
   printf("-------------ANTES DE HUFFMAN--------------\n");
+  bubbleSort(retorna_inicio_lista(ListaDeArvores));
   ImprimeLista(ListaDeArvores); // debug pré huffman
   printf("fim da imprime lista pré huffman\n");
   printf("-------------DEPOIS DE HUFFMAN-------------\n");
@@ -46,6 +49,6 @@ int main(int argc, char const *argv[]) {
 	  }
     printf("%d\n",bitmapGetLength(bm));
     printf("FIM DO DEBUG BITMAP\n");
-
+    printf("%d\n", n);
   return 0;  
 }
