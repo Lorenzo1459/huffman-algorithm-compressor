@@ -70,23 +70,87 @@ int eh_folha(Arv* a){
     return 0;
   }
 }
+int arv_mapeia(Arv* a, bitmap* bm,int i, char* posicao){
+  if(arv_vazia(a)){
+    puts("vazia");
+    posicao[i]='\0';
+    i--;
+    return NULL;
+  }
+  printf("%c \n",a -> c);
+  if(eh_folha(a)){
+    posicao[i+1]='\0';
+    printf("%s\n", posicao);
+    //i-1;
 
-int arv_mapeia(Arv* a, bitmap* bm){  
-  if (!arv_vazia(a)) {
-    if(a->esq != NULL){
-      bitmapAppendLeastSignificantBit(bm, 0);      
-      arv_mapeia(a->esq, bm);
-    }
-    if(a->dir != NULL){      
-      bitmapAppendLeastSignificantBit(bm, 1);
-      arv_mapeia(a->dir, bm);
-    }
-    if(eh_folha(a)){                  
+
+  }
+  else{
+
+  //if(a->esq != NULL){
+    i++;
+    posicao[i]='0';
+    arv_mapeia(a->esq, bm,i, posicao);
+ 
+  //}
+
+  
+  //if(a->dir != NULL){
+    i++;
+    posicao[i]='1';
+
+    arv_mapeia(a->dir, bm, i, posicao);
+
+  //}
+  }
+ 
+ 
+
+  // posicao[i]='\0';
+  
+
+}
+
+
+
+
+// int arv_mapeia(Arv* a, bitmap* bm, long long int i){ // i sempre será 1 na chamada  
+//   //botar 1 no começo depois * por 10 se for pra esquerda e por 10 + 1 pra direita
+//   if (!arv_vazia(a)) {
+//     if(a->esq != NULL){
+//       // bitmapAppendLeastSignificantBit(bm, 0);
+//       i = i*10;
+//       arv_mapeia(a->esq, bm,i);
+//       i=1;
+//     }
+//     if(a->dir != NULL){
+//       // bitmapAppendLeastSignificantBit(bm, 1);
+//       i = (i*10) + 1;
+//       arv_mapeia(a->dir, bm,i);
+//     }
+//     if(eh_folha(a)){      
+//       printf("%lli\n",i);
+      
+      
+//     }
+//     i=1;
+//   }
+// }
+
+void arv_cabecalho(Arv* a, bitmap* bm){
+  if(!arv_vazia(a)){
+    if(eh_folha(a)){
+      bitmapAppendLeastSignificantBit(bm, 1);      
       for(int i = 7; i >= 0; i--){
         bitmapAppendLeastSignificantBit(bm, (a->c >> i) & 1); // dá append em cada bit do caractere de dado nó no bitmap
       }
-    }    
-  }  
+    }
+    else{
+      bitmapAppendLeastSignificantBit(bm, 0);
+      arv_cabecalho(a->esq, bm);
+      arv_cabecalho(a->dir, bm);
+    }
+  }
 }
 
 void arv_imprime (Arv* a){

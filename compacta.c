@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]) {
   if (fp != NULL) {
     while ((c = fgetc(fp)) != EOF) { // percorrendo o arquivo
       n++;
-      printf("%c", c);
+      // printf("%c", c);
       unsigned char aux = c;
       VetorASC[aux]++; // aumentando o indice do caractere lido
     }//no final desse loop o VetorASC contem todos os pesos dos caracteres
@@ -30,25 +30,32 @@ int main(int argc, char const *argv[]) {
       //E inserindo na lista de arvores
     }
   }
-  printf("-------------ANTES DE HUFFMAN--------------\n");
+  // printf("-------------ANTES DE HUFFMAN--------------\n");
   bubbleSort(retorna_inicio_lista(ListaDeArvores));
-  ImprimeLista(ListaDeArvores); // debug pré huffman
-  printf("fim da imprime lista pré huffman\n");
-  printf("-------------DEPOIS DE HUFFMAN-------------\n");
+  // ImprimeLista(ListaDeArvores); // debug pré huffman
+  // printf("fim da imprime lista pré huffman\n");
+  // printf("-------------DEPOIS DE HUFFMAN-------------\n");
   Alg_HuffmanComp(ListaDeArvores);  //processo de aplicacao de huffman
   Arv* arv_otima = RetornaArvoreOtima(ListaDeArvores); // pega a primeira arvore da lista (depois de huffman a unica arvore da lista é a arvore otima)
-  arv_imprime(arv_otima); // debug pós huffman (arvore otima)
-  printf("fim da imprime lista pós huffman\n");
+  // arv_imprime(arv_otima); // debug pós huffman (arvore otima)
+  // printf("fim da imprime lista pós huffman\n");
 
   bitmap bm = bitmapInit(1024);
-  arv_mapeia(arv_otima, &bm);
-    printf("DEBUG BITMAP\n");  
-    int i;
-    for (i=0; i< bitmapGetLength(bm); i++) {      
-		  printf("bit #%d = %0xh\n", i, bitmapGetBit(bm, i));
-	  }
-    printf("%d\n",bitmapGetLength(bm));
-    printf("FIM DO DEBUG BITMAP\n");
-    printf("%d\n", n);
+  //VetorASC = {0};
+  int i = 0;
+  char vetor[9];
+  vetor[0]='1';
+
+  arv_mapeia(arv_otima, &bm, i,vetor);
+
+  arv_cabecalho(arv_otima, &bm);
+    // printf("DEBUG BITMAP\n");  
+    // int i;
+    // for (i=0; i< bitmapGetLength(bm); i++) {      
+		//   printf("bit #%d = %0xh\n", i, bitmapGetBit(bm, i));
+	  // }
+    // printf("%d\n",bitmapGetLength(bm));
+    // printf("FIM DO DEBUG BITMAP\n");
+    // printf("%d\n", n);
   return 0;  
 }
