@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/icaro/Desktop/trab/huffmano/bitmap.h
+
+/home/icaro/Desktop/trab/huffmano/compactador.c
+compactador.h
+/home/icaro/Desktop/trab/huffmano/compactador.h
+bitmap.h
+/home/icaro/Desktop/trab/huffmano/bitmap.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+
+/home/icaro/Desktop/trab/huffmano/compactador.h
+bitmap.h
+/home/icaro/Desktop/trab/huffmano/bitmap.h
+

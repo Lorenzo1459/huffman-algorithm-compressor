@@ -70,72 +70,95 @@ int eh_folha(Arv* a){
     return 0;
   }
 }
-int arv_mapeia(Arv* a, bitmap* bm,int i, char* posicao){
-  if(arv_vazia(a)){
-    puts("vazia");
-    posicao[i]='\0';
-    i--;
-    return NULL;
-  }
-  printf("%c \n",a -> c);
-  if(eh_folha(a)){
-    posicao[i+1]='\0';
-    printf("%s\n", posicao);
-    //i-1;
-
-
-  }
-  else{
-
-  //if(a->esq != NULL){
-    i++;
-    posicao[i]='0';
-    arv_mapeia(a->esq, bm,i, posicao);
- 
-  //}
-
-  
-  //if(a->dir != NULL){
-    i++;
-    posicao[i]='1';
-
-    arv_mapeia(a->dir, bm, i, posicao);
-
-  //}
-  }
- 
- 
-
-  // posicao[i]='\0';
-  
-
-}
+// int arv_mapeia(Arv* a, bitmap* bm,int i, char* posicao){
+//   printf("%c",a -> c);
+//   if(eh_folha(a)){
+//     posicao[i+1]='\0';
+//     printf("%s \n",posicao);
+//     i--;
+    
+//   }
+//   if(a->esq != NULL){
+//     i++;
+//     posicao[i]='0';
+//     arv_mapeia(a->esq,bm ,i,posicao);
+    
+//   }
+//   if(a->dir != NULL){
+//     i++;
+//     posicao[i]='1';
+//     arv_mapeia(a->dir,bm ,i,posicao);
+//   }
+//   // else{
+//   //   posicao[i]='\0';
+//   //   i --;
+//   // }
+// }
 
 
 
 
-// int arv_mapeia(Arv* a, bitmap* bm, long long int i){ // i sempre será 1 na chamada  
+// int arv_mapeia(Arv* a, bitmap* bm, int i, char* posicao){ // i sempre será 1 na chamada  
 //   //botar 1 no começo depois * por 10 se for pra esquerda e por 10 + 1 pra direita
 //   if (!arv_vazia(a)) {
+//     printf("%c",a -> c);
 //     if(a->esq != NULL){
 //       // bitmapAppendLeastSignificantBit(bm, 0);
-//       i = i*10;
-//       arv_mapeia(a->esq, bm,i);
-//       i=1;
+//       posicao[i]='0';
+//       i++;
+//       arv_mapeia(a->esq, bm,i,posicao);
 //     }
 //     if(a->dir != NULL){
 //       // bitmapAppendLeastSignificantBit(bm, 1);
-//       i = (i*10) + 1;
-//       arv_mapeia(a->dir, bm,i);
+//       puts("entrou");
+//       posicao[i-1]='1';
+//       i++;
+//       arv_mapeia(a->dir, bm,i,posicao);
 //     }
 //     if(eh_folha(a)){      
-//       printf("%lli\n",i);
-      
-      
+//       posicao[i]='\0';
+//       printf("%s\n",posicao);
+//       posicao[i-1]='\0';
+//       i--;
+
+//       return NULL;
 //     }
-//     i=1;
+//     i--;
+  
 //   }
 // }
+
+int arv_mapeia(Arv* a, bitmap* bm, int i, char* posicao){ // i sempre será 1 na chamada  
+  //botar 1 no começo depois * por 10 se for pra esquerda e por 10 + 1 pra direita
+  if (!arv_vazia(a)) {
+    printf("%c",a -> c);
+    if(a->esq != NULL){ //coloca 0 se for pra esquerda
+      // bitmapAppendLeastSignificantBit(bm, 0);
+      posicao[i]='0';
+      i++;
+      arv_mapeia(a->esq, bm,i,posicao);
+      i--;//pra quando estiver voltando n guardar lixo
+    }
+    
+    if(a->dir != NULL){ //coloca 1 se for pra esquerda
+      // bitmapAppendLeastSignificantBit(bm, 1); 
+      posicao[i]='1';
+      i++;
+      arv_mapeia(a->dir, bm,i,posicao); 
+      i--;
+    }
+    
+    if(eh_folha(a)){      
+      posicao[i]='\0';
+      printf("%s\n",posicao);
+      //posicao[i-1]='\0';
+      //return NULL;
+    }
+    //puts("aaaaa");
+    posicao[i]='\0';
+    i--; 
+  }
+}
 
 void arv_cabecalho(Arv* a, bitmap* bm){
   if(!arv_vazia(a)){
@@ -280,9 +303,9 @@ void bubbleSort(TCelula* comeco)
         trocou = 0; 
         aux = comeco; 
   
-        while (aux->prox != aux2) 
+        while (aux->prox != aux2)
         { 
-            if (aux->arvore_lista->peso > aux->prox->arvore_lista->peso) 
+            if (aux->arvore_lista->peso > aux->prox->arvore_lista->peso)
             {  
                 troca(aux, aux->prox); 
                 trocou = 1; 
@@ -296,9 +319,16 @@ void bubbleSort(TCelula* comeco)
   
 void troca(TCelula *a, TCelula *b) 
 { 
+    //TCelula* temp=b;
     int temp = a->arvore_lista->peso; 
-    a->arvore_lista->peso = b->arvore_lista->peso;
-    b->arvore_lista->peso = temp;
+     a->arvore_lista->peso = b->arvore_lista->peso;
+     b->arvore_lista->peso = temp;
+    char temp2 =a->arvore_lista->c;  
+    a ->arvore_lista->c = b ->arvore_lista->c;
+    b->arvore_lista->c=temp2;// n sei se tem algum motivo pra estar ordenando so o peso
+
+    //b=a
+    //a=temp;
 } 
 //FIM DAS FUNCOES DE LISTA
 

@@ -1,0 +1,3 @@
+/home/icaro/Desktop/trab/huffmano/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/icaro/Desktop/trab/huffmano/cmake-build-debug/CMakeFiles/huffmano.dir
+/home/icaro/Desktop/trab/huffmano/cmake-build-debug/CMakeFiles/edit_cache.dir

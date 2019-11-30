@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/huffmano.dir/bitmap.c.o CMakeFiles/huffmano.dir/compacta.c.o CMakeFiles/huffmano.dir/compactador.c.o  -o huffmano 
