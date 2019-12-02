@@ -40,8 +40,41 @@ int main(int argc, char const *argv[]) {
   arv_imprime(arv_otima); // debug pós huffman (arvore otima)
   printf("fim da imprime lista pós huffman\n");
 
-  bitmap bm = bitmapInit(1024);
-  arv_mapeia(arv_otima, &bm);
+  bitmap bm = bitmapInit(1024);  
+
+  int j = 0;
+  char vetor[9];  
+
+  char** VetASC = (char**)malloc(256 * sizeof(char*));
+  for(int k = 0; k < 256; k++)  
+   VetASC[k] = (char*)malloc(9 * sizeof(char));
+
+  arv_mapeia(arv_otima, j,vetor, VetASC);
+
+
+  printf("inicio debug\n");
+  // puts(VetASC[0]);
+  for(int k = 0; k < 256; k++){            
+    printf("%ld - ", strlen(VetASC[k]));
+    puts(VetASC[k]);
+  }
+
+  rewind(fp);
+  n = 0;
+  while ((c = fgetc(fp)) != EOF) { // percorrendo o arquivo      
+      unsigned char aux = c;      
+      for(int i = strlen(VetASC[aux]); i >= 0; i--){
+        if(bitmapGetLength(bm) == bitmapGetMaxSize(bm)){
+          //ESVAZIAR BITMAP OU CRIAR OUTRO
+        }
+        bitmapAppendLeastSignificantBit(&bm, VetASC[aux]); // dá append em cada bit do caractere no bitmap
+      }
+    }    
+  fclose(fp);
+  // arv_cabecalho(arv_otima, &bm);
+
+
+
     printf("DEBUG BITMAP\n");  
     int i;
     for (i=0; i< bitmapGetLength(bm); i++) {      

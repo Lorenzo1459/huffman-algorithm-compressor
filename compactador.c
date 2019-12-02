@@ -71,22 +71,69 @@ int eh_folha(Arv* a){
   }
 }
 
-int arv_mapeia(Arv* a, bitmap* bm){  
+// int arv_mapeia(Arv* a, bitmap* bm, char* str){  
+//   if (!arv_vazia(a)) {
+//     if(a->esq != NULL){
+//       // bitmapAppendLeastSignificantBit(bm, 0);
+      
+//       arv_mapeia(a->esq, bm);
+//     }
+//     if(a->dir != NULL){            
+//       // bitmapAppendLeastSignificantBit(bm, 1);
+//       arv_mapeia(a->dir, bm);
+//     }
+//     if(eh_folha(a)){                  
+//       for(int i = 7; i >= 0; i--){
+//         // bitmapAppendLeastSignificantBit(bm, (a->c >> i) & 1); // dá append em cada bit do caractere de dado nó no bitmap
+//       }
+//     }    
+//   }  
+// }
+
+void arv_mapeia(Arv* a, int i, char* posicao, char** asc){ // i sempre será 1 na chamada  
+  //botar 1 no começo depois * por 10 se for pra esquerda e por 10 + 1 pra direita
   if (!arv_vazia(a)) {
-    if(a->esq != NULL){
-      bitmapAppendLeastSignificantBit(bm, 0);      
-      arv_mapeia(a->esq, bm);
+    if(a->esq != NULL){ //coloca 0 se for pra esquerda      
+      posicao[i]='0';
+      i++;      
+      arv_mapeia(a->esq, i, posicao, asc);
+      i--;  //pra quando estiver voltando n guardar lixo
     }
-    if(a->dir != NULL){      
-      bitmapAppendLeastSignificantBit(bm, 1);
-      arv_mapeia(a->dir, bm);
+    
+    if(a->dir != NULL){ //coloca 1 se for pra direita      
+      posicao[i]='1';
+      i++;      
+      arv_mapeia(a->dir, i,posicao, asc); 
+      i--;
     }
-    if(eh_folha(a)){                  
+    
+    if(eh_folha(a)){      
+      posicao[i]='\0';
+      printf("%c -> ",a -> c);      
+      printf("%s\n",posicao);
+      unsigned char aux = a->c;                  
+      // asc[aux] = (char*)malloc(sizeof(posicao));
+      strcpy(asc[aux],posicao);
+    }
+  }
+  return ;  
+}
+
+
+void arv_cabecalho(Arv* a, bitmap* bm){
+  if(!arv_vazia(a)){
+    if(eh_folha(a)){
+      bitmapAppendLeastSignificantBit(bm, 1);      
       for(int i = 7; i >= 0; i--){
         bitmapAppendLeastSignificantBit(bm, (a->c >> i) & 1); // dá append em cada bit do caractere de dado nó no bitmap
       }
-    }    
-  }  
+    }
+    else{
+      bitmapAppendLeastSignificantBit(bm, 0);
+      arv_cabecalho(a->esq, bm);
+      arv_cabecalho(a->dir, bm);
+    }
+  }
 }
 
 void arv_imprime (Arv* a){
@@ -233,8 +280,11 @@ void bubbleSort(TCelula* comeco)
 void troca(TCelula *a, TCelula *b) 
 { 
     int temp = a->arvore_lista->peso; 
+    int temp2 = a->arvore_lista->c;
     a->arvore_lista->peso = b->arvore_lista->peso;
+    a->arvore_lista->c = b->arvore_lista->c;
     b->arvore_lista->peso = temp;
+    b->arvore_lista->c = temp2;
 } 
 //FIM DAS FUNCOES DE LISTA
 
