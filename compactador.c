@@ -109,8 +109,8 @@ void arv_mapeia(Arv* a, int i, char* posicao, char** asc){ // i sempre será 1 n
     
     if(eh_folha(a)){      
       posicao[i]='\0';
-      printf("%c -> ",a -> c);      
-      printf("%s\n",posicao);
+      // printf("%c -> ",a -> c);      
+      // printf("%s\n",posicao);
       unsigned char aux = a->c;                  
       // asc[aux] = (char*)malloc(sizeof(posicao));
       strcpy(asc[aux],posicao);
