@@ -1,6 +1,8 @@
 #ifndef COMPACTADOR_H_
 #define COMPACTADOR_H_
 #include "bitmap.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 typedef struct arv Arv;
 typedef struct celula TCelula;
@@ -27,7 +29,7 @@ int arv_vazia (Arv* a);
 int arv_pertence (Arv* a, char c);
 int eh_folha(Arv* a);
 void arv_mapeia(Arv* a, int i, char* posicao, char** asc);
-void arv_cabecalho(Arv* a, bitmap* bm);
+void arv_cabecalho(Arv* a, bitmap* bm, FILE* saida);
 void arv_imprime (Arv* a);
 char info (Arv* a);
 int altura (Arv* a);

@@ -120,9 +120,9 @@ void arv_mapeia(Arv* a, int i, char* posicao, char** asc){ // i sempre será 1 n
 }
 
 
-void arv_cabecalho(Arv* a, bitmap* bm){
+void arv_cabecalho(Arv* a, bitmap* bm, FILE* saida){
   if(!arv_vazia(a)){
-    if(eh_folha(a)){
+    if(eh_folha(a)){      
       bitmapAppendLeastSignificantBit(bm, 1);      
       for(int i = 7; i >= 0; i--){
         bitmapAppendLeastSignificantBit(bm, (a->c >> i) & 1); // dá append em cada bit do caractere de dado nó no bitmap
@@ -130,8 +130,8 @@ void arv_cabecalho(Arv* a, bitmap* bm){
     }
     else{
       bitmapAppendLeastSignificantBit(bm, 0);
-      arv_cabecalho(a->esq, bm);
-      arv_cabecalho(a->dir, bm);
+      arv_cabecalho(a->esq, bm, saida);
+      arv_cabecalho(a->dir, bm, saida);
     }
   }
 }

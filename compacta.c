@@ -63,23 +63,22 @@ int main(int argc, char const *argv[]) {
 
   rewind(fp); //resetando ponteiro do arquivo para o inicio
   // n = 0; 
-  FILE* compactado = fopen("compactado.bin","wb");
+  FILE* compactado = fopen("arquivo.comp","wb");
 
-  arv_cabecalho(arv_otima, &bm);  // prepara a serializacao da arvore, que sera escrita no cabecalho
+  arv_cabecalho(arv_otima, &bm, compactado);  // prepara a serializacao da arvore, que sera escrita no cabecalho
   printf("length ========= %d\n",bitmapGetLength(bm));
 
   int byteaux;
-  int lixo;
-  if(bitmapGetLength(bm)%8 == 0)
+  int lixo = (bitmapGetLength(bm)%8);
+  if(lixo == 0)
     byteaux = 0;  
   else{
-    byteaux = 1;  
-    lixo = (bitmapGetLength(bm)%8);
+    byteaux = 1;      
   }
   int Tamanho_serializacao = (bitmapGetLength(bm)/8) + byteaux;
 
   printf("debugwen = %d\nlixo = %d\n", Tamanho_serializacao, lixo);
-  fwrite(&Tamanho_serializacao,sizeof(short int),1,compactado); // escreve quantos dos proximos bits do arquivo sao cabecalho
+  fwrite(&Tamanho_serializacao,sizeof(short int),1,compactado); // escreve quantos dos proximos bits do arquivo sao cabecalho  
   fwrite(&lixo, sizeof(unsigned char), 1, compactado); // escreve quantos bits de lixo o ultimo byte da serializacao possui
   fwrite(bitmapGetContents(bm),sizeof(unsigned char),Tamanho_serializacao,compactado);  // escreve a serializacao da arvore no arquivo binario  
   
