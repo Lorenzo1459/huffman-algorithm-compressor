@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 struct arv{
  char c;
  int peso;
@@ -114,6 +115,70 @@ void arv_cabecalho(Arv* a, bitmap* bm, FILE* saida){
       arv_cabecalho(a->dir, bm, saida);
     }
   }
+}
+
+Arv * franco_rec (bitmap*  bm, int * i)
+{
+  if (*i >= bitmapGetLength(*bm))
+    return NULL;
+  Arv* arvaux = arv_criavazia();
+  unsigned char bit = bitmapGetBit(*bm,*i);
+  if (bit == 1)
+  {  
+    (*i)++;
+    unsigned char vet[8], letra;
+    for(int j = *i + 7; j >= *i; j--){
+        vet[j - *i] = (bitmapGetBit(*bm,j) & 1);                
+    }
+    unsigned char aux = 0;
+    for (int k = 0; k < 8; k++){
+        aux = aux << 1;
+        aux = aux | vet[k];
+    }
+    arvaux = arv_cria (aux, 1, NULL, NULL);
+    (*i) += 7;
+    return arvaux;
+  }
+  else
+  {
+    (*i)++;
+    Arv * aux_esq = franco_rec (bm, i);
+    (*i)++;
+    Arv * aux_dir = franco_rec (bm, i);
+    arvaux = arv_cria ('-', -1, aux_esq, aux_dir);
+  }
+}
+
+Arv* reconstroi_arv(bitmap*  bm, Arv* a){  
+  char letra;
+  Arv* arvaux = arv_criavazia();
+  for(int i = 0; i < bitmapGetLength(*bm); i++){    
+    unsigned char bit = bitmapGetBit(*bm,i);        
+    if(bit == 1){      
+      i++;            
+      //criar folha
+      unsigned char vet[8], letra;
+      for(int j = i + 7; j >= i; j--){
+          vet[j - i] = (bitmapGetBit(*bm,j) & 1);                
+      }
+      unsigned char aux = 0;
+      for (int k = 0; k < 8; k++){
+          aux = aux << 1;
+          aux = aux | vet[k];
+      }
+      printf("%c", aux);                                    
+      printf("\n");                        
+      i+=7; 
+      arv_cria(aux, 1, arv_criavazia(), arv_criavazia());
+      return a;
+    }
+    else if(bit == 0){  
+        // cria nó arv
+        // a->esq = arv_cria('z', 0, reconstroi_arv(bm, a->esq), NULL);
+        // a->dir = arv_cria('z', 0, reconstroi_arv(bm, a->dir), NULL);
+    }
+  }
+  // return a;
 }
 
 void arv_imprime (Arv* a){
