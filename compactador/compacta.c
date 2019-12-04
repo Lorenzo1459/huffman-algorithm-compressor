@@ -69,12 +69,13 @@ int main(int argc, char const *argv[]) {
   printf("length ========= %d\n",bitmapGetLength(bm));
 
   int byteaux;
-  int lixo = (bitmapGetLength(bm)%8);
+  int lixo = (bitmapGetLength(bm)%8); // bits restantes do ultimo byte  
   if(lixo == 0)
     byteaux = 0;  
   else{
     byteaux = 1;      
   }
+  lixo = 8 - lixo; // agora sim eh lixo  
   int Tamanho_serializacao = (bitmapGetLength(bm)/8) + byteaux;
 
   printf("debugwen = %d\nlixo = %d\n", Tamanho_serializacao, lixo);
@@ -88,22 +89,22 @@ int main(int argc, char const *argv[]) {
       for(int i = 0; i <= strlen(VetASC[aux]) - 1; i++){
         if(bitmapGetLength(bm) == bitmapGetMaxSize(bm)){
           //ESVAZIAR BITMAP
-          fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); // transcreve o bitmap no arquivo binario "compactado"          
+          // fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); // transcreve o bitmap no arquivo binario "compactado"          
           free(bitmapGetContents(bm)); // libera o bitmap                 
           bm = bitmapInit(1024); // reinicia o bitmap para continuar a codificacao
         }        
-        // printf("%s - ",VetASC[aux]);
-        // printf("%c - ", VetASC[aux][i]);        
-        // printf("debug ------- %c\n", ((unsigned char)VetASC[aux][i]));
+        printf("%s - ",VetASC[aux]);
+        printf("%c - ", VetASC[aux][i]);        
+        printf("debug ------- %c\n", ((unsigned char)VetASC[aux][i]));
         bitmapAppendLeastSignificantBit(&bm, ((unsigned char)VetASC[aux][i])); // dá append em cada bit do caminho ate alcançar o caractere lido (armazenado em VetASC)
       }
-      // printf("---------------------------------------\n");
+      printf("---------------------------------------\n");
     }    
-    fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); /* escrevo o que sobrou do bitmap (sem pegar lixo visto que uso 
+    // fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); /* escrevo o que sobrou do bitmap (sem pegar lixo visto que uso 
     // bitmapGetLength para escrever exatamente o numero de bits restantes) */
     free(bitmapGetContents(bm));  // libera o bitmap
     bm = bitmapInit(1024);
-  fclose(fp);  
+    fclose(fp);  
   
 
     // printf("DEBUG BITMAP\n");  
