@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]) {
         fread(&lixo,sizeof(unsigned char),1,fp); // le o num de bits de lixo do cabecalho
         printf("lixo = %d\n", lixo);    
 
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < n; i++){ // le o cabecalho e armazena no bitmap bm
             unsigned char c;
             fread(&c,sizeof(unsigned char),1,fp);
             for(int j = 7; j >= 0; j--){
@@ -21,8 +21,43 @@ int main(int argc, char const *argv[]) {
             }                        
         }                
     }    
-    Arv* reconst = franco_rec(&bm, 0);
-    arv_imprime(reconst);
+    int p = 0;
+    Arv* reconst = reconstroi_arv(&bm, &p);
+    // arv_imprime(reconst); //debug
+
+    free(bitmapGetContents(bm));
+    bm = bitmapInit(1024); // reinicia o bitmap p/ leitura da codificacao
+
+    FILE* descompactado = fopen("descompactado","w");
+    int z = 0;
+    Arv* aux = reconst;
+    // int cont = 0;
+    while(!feof(fp)){        
+        unsigned char c;
+        fread(&c,sizeof(unsigned char),1,fp);
+        for(int j = 7; j >= 0; j--){
+            if(bitmapGetLength(bm) == bitmapGetMaxSize(bm)){
+                // for(int t = 0; t < bitmapGetLength(bm); t++){
+                //     aux = percorre(aux, ) // escrever no arquivo
+                // }
+                free(bitmapGetContents(bm));
+                bm = bitmapInit(1024);
+            }
+            // bitmapAppendLeastSignificantBit(&bm,(c>>j)&1);
+            // aux = percorre(aux,(c>>j)&&1);
+            // if(eh_folha(aux)){
+            //     unsigned char d = info(aux);
+            //     printf("%c - ", d);
+            //     cont++;
+            // }
+        }
+        z++;
+    }
+    // printf("cont = %d\n", cont);
+    // escrever no arquivo
+    free(bitmapGetContents(bm));
+    bm = bitmapInit(1024);
+    // fclose(descompactado);
     // int i;
     // for (i=0; i< bitmapGetLength(bm); i++) {      
 	//   printf("bit #%d = %0xh\n", i, bitmapGetBit(bm, i));

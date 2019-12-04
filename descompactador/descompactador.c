@@ -117,11 +117,13 @@ void arv_cabecalho(Arv* a, bitmap* bm, FILE* saida){
   }
 }
 
-Arv * franco_rec (bitmap*  bm, int * i)
-{
-  if (*i >= bitmapGetLength(*bm))
+Arv* reconstroi_arv (bitmap*  bm, int* i)
+{   
+  if (*i >= bitmapGetLength(*bm)){
+    printf("erro\n");
     return NULL;
-  Arv* arvaux = arv_criavazia();
+  }  
+  Arv* arvaux;
   unsigned char bit = bitmapGetBit(*bm,*i);
   if (bit == 1)
   {  
@@ -135,50 +137,53 @@ Arv * franco_rec (bitmap*  bm, int * i)
         aux = aux << 1;
         aux = aux | vet[k];
     }
-    arvaux = arv_cria (aux, 1, NULL, NULL);
+    arvaux = arv_cria (aux, 1, NULL, NULL);    
     (*i) += 7;
     return arvaux;
   }
   else
   {
     (*i)++;
-    Arv * aux_esq = franco_rec (bm, i);
+    Arv * aux_esq = reconstroi_arv (bm, i);
     (*i)++;
-    Arv * aux_dir = franco_rec (bm, i);
-    arvaux = arv_cria ('-', -1, aux_esq, aux_dir);
+    Arv * aux_dir = reconstroi_arv (bm, i);
+    arvaux = arv_cria ('z', 0, aux_esq, aux_dir);
   }
 }
 
-Arv* reconstroi_arv(bitmap*  bm, Arv* a){  
-  char letra;
-  Arv* arvaux = arv_criavazia();
-  for(int i = 0; i < bitmapGetLength(*bm); i++){    
-    unsigned char bit = bitmapGetBit(*bm,i);        
-    if(bit == 1){      
-      i++;            
-      //criar folha
-      unsigned char vet[8], letra;
-      for(int j = i + 7; j >= i; j--){
-          vet[j - i] = (bitmapGetBit(*bm,j) & 1);                
-      }
-      unsigned char aux = 0;
-      for (int k = 0; k < 8; k++){
-          aux = aux << 1;
-          aux = aux | vet[k];
-      }
-      printf("%c", aux);                                    
-      printf("\n");                        
-      i+=7; 
-      arv_cria(aux, 1, arv_criavazia(), arv_criavazia());
-      return a;
-    }
-    else if(bit == 0){  
-        // cria nó arv
-        // a->esq = arv_cria('z', 0, reconstroi_arv(bm, a->esq), NULL);
-        // a->dir = arv_cria('z', 0, reconstroi_arv(bm, a->dir), NULL);
-    }
+// unsigned char busca_folha(Arv* a, bitmap* bm, int* i){  
+//   unsigned char bit = bitmapGetBit(*bm,*i);
+//   if(a != NULL){
+//     if(eh_folha(a)){
+//       unsigned char aux = 0;
+//       for (int k = 0; k < 8; k++){
+//           aux = aux << 1;
+//           aux = aux | a->c;
+//       }
+//       return aux;
+//     }
+//     if(i == 0){
+//       busca_folha(a->esq);
+//     }
+//     if(i == 1){
+//       busca_folha(a->dir);
+//     }
+//   }
+  
+// }
+
+Arv* percorre(Arv* a, int i){    
+  if(a != NULL){
+    if(eh_folha(a))
+        return a;
+    if(i == 0)
+        return a->esq;
+
+    else if(i == 1)
+        return a->dir;
   }
-  // return a;
+
+    return NULL;
 }
 
 void arv_imprime (Arv* a){
