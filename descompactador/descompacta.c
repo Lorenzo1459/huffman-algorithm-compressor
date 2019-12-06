@@ -5,7 +5,7 @@ int main(int argc, char const *argv[]) {
     short int n;
     char lixo;        
     char c; // aux do ponteiro de arquivo
-    bitmap bm = bitmapInit(1024);
+    bitmap bm = bitmapInit(4096);
     FILE* fp = fopen(argv[1],"rb"); //abrindo arquivo    
     if(fp != NULL){        
         fread(&n,sizeof(short int),1,fp); // le o num de bytes de cabecalho
@@ -29,14 +29,11 @@ int main(int argc, char const *argv[]) {
     // arv_imprime(reconst); //debug
 
     free(bitmapGetContents(bm));
-    bm = bitmapInit(1024); // reinicia o bitmap p/ leitura da codificacao    
+    bm = bitmapInit(4096); // reinicia o bitmap p/ leitura da codificacao    
 
     FILE* descompactado = fopen("descompactado","w");    
     char l;
-    Arv* aux = reconst;
-    //bom esse bombom
-    //bbb ooo mmm ee ss 
-    //1110100100101110110101100111010011101000
+    Arv* aux = reconst;    
     int cont = 0;
     printf("tell = %ld\n", ftell(fp));
     while(!feof(fp)){   
@@ -55,9 +52,9 @@ int main(int argc, char const *argv[]) {
             }
             if(eh_folha(aux)){
                 l = retorna_caractere(aux);
-                printf("entrei no retorna folha = %c, ", l);                
+                // printf("entrei no retorna folha = %c, ", l);                
                 fwrite(&l,sizeof(unsigned char), 1, descompactado);
-                printf("pos = %ld\n", ftell(fp));
+                // printf("pos = %ld\n", ftell(fp));
                 aux = reconst;                
             }
             // bitmapAppendLeastSignificantBit(&bm,(c>>j)&1);
@@ -67,7 +64,7 @@ int main(int argc, char const *argv[]) {
     printf("\ncont = %d\n", cont);
         printf("tell = %ld\n", ftell(fp));
     // escrever no arquivo    
-    // fclose(descompactado);
+    fclose(descompactado);
     // int i;
     // for (i=0; i< bitmapGetLength(bm); i++) {      
 	//   printf("bit #%d = %0xh\n", i, bitmapGetBit(bm, i));
