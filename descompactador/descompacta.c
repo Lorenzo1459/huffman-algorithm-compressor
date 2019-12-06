@@ -40,7 +40,7 @@ int main(int argc, char const *argv[]) {
         unsigned char c;
         fread(&c,sizeof(unsigned char),1,fp);
         for(int j = 7; j >= 0; j--){         
-            printf("%d",(c>>j)&&1);
+            printf("%d ",(c>>j)&&1);
             if(((c>>j)&&1)==0){
                 // printf("entrei no retorna esq\n");
                 aux = retorna_esq(aux);
@@ -54,12 +54,12 @@ int main(int argc, char const *argv[]) {
                 l = retorna_caractere(aux);
                 printf("%c\n", l);
                 fwrite(&l,sizeof(unsigned char), 1, descompactado);
-                
-                aux = reconst;
+                printf("pos = %ld\n", ftell(fp));
+                aux = reconst;                
             }
             // bitmapAppendLeastSignificantBit(&bm,(c>>j)&1);
         }        
-        printf("\n");
+        // printf("\n");
     }
         printf("tell = %ld\n", ftell(fp));
     // escrever no arquivo    

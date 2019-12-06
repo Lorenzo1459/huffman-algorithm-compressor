@@ -83,13 +83,14 @@ int main(int argc, char const *argv[]) {
   fwrite(&lixo, sizeof(unsigned char), 1, compactado); // escreve quantos bits de lixo o ultimo byte da serializacao possui
   fwrite(bitmapGetContents(bm),sizeof(unsigned char),Tamanho_serializacao,compactado);  // escreve a serializacao da arvore no arquivo binario  
   
-
+  free(bitmapGetContents(bm)); // libera o bitmap                 
+  bm = bitmapInit(1024); // reinicia o bitmap para continuar a codificacao
   while ((c = fgetc(fp)) != EOF) { // percorrendo o arquivo a ser compactado
       unsigned char aux = c;      
       for(int i = 0; i <= strlen(VetASC[aux]) - 1; i++){
         if(bitmapGetLength(bm) == bitmapGetMaxSize(bm)){
           //ESVAZIAR BITMAP
-          // fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); // transcreve o bitmap no arquivo binario "compactado"          
+          fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); // transcreve o bitmap no arquivo binario "compactado"          
           free(bitmapGetContents(bm)); // libera o bitmap                 
           bm = bitmapInit(1024); // reinicia o bitmap para continuar a codificacao
         }        
@@ -100,8 +101,7 @@ int main(int argc, char const *argv[]) {
       }
       printf("---------------------------------------\n");
     }    
-    // fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); /* escrevo o que sobrou do bitmap (sem pegar lixo visto que uso 
-    // bitmapGetLength para escrever exatamente o numero de bits restantes) */
+    fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); // escrevo o que sobrou do bitmap
     free(bitmapGetContents(bm));  // libera o bitmap
     bm = bitmapInit(1024);
     fclose(fp);  
