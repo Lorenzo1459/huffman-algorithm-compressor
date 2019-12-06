@@ -36,6 +36,10 @@ void arv_imprime (Arv* a);
 char info (Arv* a);
 int altura (Arv* a);
 
+Arv* retorna_esq(Arv* a);
+Arv* retorna_dir(Arv* a);
+char retorna_caractere(Arv* a);
+
 //FIM DAS FUNCOES DE ARVORE
 
 

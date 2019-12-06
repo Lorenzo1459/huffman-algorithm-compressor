@@ -7,46 +7,57 @@ int main(int argc, char const *argv[]) {
     char c; // aux do ponteiro de arquivo
     bitmap bm = bitmapInit(1024);
     FILE* fp = fopen(argv[1],"rb"); //abrindo arquivo    
-    if(fp != NULL){
-        printf("tell = %ld\n", ftell(fp));
+    if(fp != NULL){        
         fread(&n,sizeof(short int),1,fp); // le o num de bytes de cabecalho
+        fseek(fp,2,SEEK_SET);
         printf("n bytes = %d\n", n);    
-        fread(&lixo,sizeof(unsigned char),1,fp); // le o num de bits de lixo do cabecalho
-        printf("lixo = %d\n", lixo);    
-        for(int i = 0; i < n; i++){ // le o cabecalho e armazena no bitmap bm
-        // printf("tell = %ld\n", ftell(fp));
+        fread(&lixo,sizeof(unsigned char),1,fp); // le o num de bits de lixo do cabecalho        
+        printf("lixo = %d\n", lixo);
+        for(int i = 0; i < n; i++){ // le o cabecalho e armazena no bitmap bm        
             unsigned char c;
-            fread(&c,sizeof(unsigned char),1,fp);
-            printf("entrei no primeiro - ");        
-            printf("%d - ", c);
+            fread(&c,sizeof(unsigned char),1,fp);            
             for(int j = 7; j >= 0; j--){
                 printf("%d", (c>>j)&1);
                 bitmapAppendLeastSignificantBit(&bm,(c>>j)&1);
             }
             printf("\n");
-        }           
-        printf("tell = %ld\n", ftell(fp));        
+        }
+        printf("tell = %ld\n", ftell(fp));
 
     int p = 0;
     Arv* reconst = reconstroi_arv(&bm, &p);
-    // arv_imprime(reconst); //debug
+    arv_imprime(reconst); //debug
 
     free(bitmapGetContents(bm));
     bm = bitmapInit(1024); // reinicia o bitmap p/ leitura da codificacao    
 
     FILE* descompactado = fopen("descompactado","w");    
-    int z = 0;
-    Arv* aux = reconst;        
-    while(!feof(fp)){ // le o resto do arquivo (parte da codificaçao, nao deveria ler o cabecalho novamente)
-        // ERRO -> ESTA LENDO ALGUMAS INFORMAÇOES REPETIDAS, MAS O PONTEIRO É ATUALIZADO POR FREAD() !! (DEBUGUEI COM FTELL())
-    // printf("tell = %ld\n", ftell(fp));
+    char l;
+    Arv* aux = reconst;   
+    //bom esse bombom
+    //bbb ooo mmm ee ss 
+    while(!feof(fp)){   
         unsigned char c;
-        fread(&c,sizeof(unsigned char),1,fp);        
-        printf("entrei no segundo - ");        
-        printf("%d - ", c);
-        for(int j = 7; j >= 0; j--){            
-            printf("%d", (c>>j)&1);
-            bitmapAppendLeastSignificantBit(&bm,(c>>j)&1);
+        fread(&c,sizeof(unsigned char),1,fp);
+        for(int j = 7; j >= 0; j--){         
+            printf("%d",(c>>j)&&1);
+            if(((c>>j)&&1)==0){
+                // printf("entrei no retorna esq\n");
+                aux = retorna_esq(aux);
+            }
+            else if (((c>>j)&&1)==1){
+                // printf("entrei no retorna dir\n");
+                aux = retorna_dir(aux);
+            }
+            if(retorna_esq(aux) == NULL && retorna_dir(aux) == NULL){
+                printf("entrei no retorna folha = ");
+                l = retorna_caractere(aux);
+                printf("%c\n", l);
+                fwrite(&l,sizeof(unsigned char), 1, descompactado);
+                
+                aux = reconst;
+            }
+            // bitmapAppendLeastSignificantBit(&bm,(c>>j)&1);
         }        
         printf("\n");
     }

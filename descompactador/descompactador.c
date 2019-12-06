@@ -163,6 +163,18 @@ Arv* percorre(Arv* a, int i){
     return NULL;
 }
 
+Arv* retorna_esq(Arv* a){
+  return a->esq;
+}
+
+Arv* retorna_dir(Arv* a){
+  return a->dir;
+}
+
+char retorna_caractere(Arv* a){
+  return a->c;
+}
+
 void arv_imprime (Arv* a){
   if (!arv_vazia(a)) {
     printf("info = %c\n", a->c);
