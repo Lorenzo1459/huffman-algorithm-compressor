@@ -17,42 +17,45 @@ int main(int argc, char const *argv[]) {
             unsigned char c;
             fread(&c,sizeof(unsigned char),1,fp);            
             for(int j = 7; j >= 0; j--){
-                printf("%d", (c>>j)&1);
+                // printf("%d", (c>>j)&1)
                 bitmapAppendLeastSignificantBit(&bm,(c>>j)&1);
             }
-            printf("\n");
         }
         printf("tell = %ld\n", ftell(fp));
+        printf("\n");
 
     int p = 0;
     Arv* reconst = reconstroi_arv(&bm, &p);
-    arv_imprime(reconst); //debug
+    // arv_imprime(reconst); //debug
 
     free(bitmapGetContents(bm));
     bm = bitmapInit(1024); // reinicia o bitmap p/ leitura da codificacao    
 
     FILE* descompactado = fopen("descompactado","w");    
     char l;
-    Arv* aux = reconst;   
+    Arv* aux = reconst;
     //bom esse bombom
     //bbb ooo mmm ee ss 
+    //1110100100101110110101100111010011101000
+    int cont = 0;
+    printf("tell = %ld\n", ftell(fp));
     while(!feof(fp)){   
         unsigned char c;
         fread(&c,sizeof(unsigned char),1,fp);
         for(int j = 7; j >= 0; j--){         
-            printf("%d ",(c>>j)&&1);
-            if(((c>>j)&&1)==0){
+            // printf("%d",(c>>j)&1);
+            cont++;
+            if(((c>>j)&1)==0){
                 // printf("entrei no retorna esq\n");
                 aux = retorna_esq(aux);
             }
-            else if (((c>>j)&&1)==1){
+            else if (((c>>j)&1)==1){
                 // printf("entrei no retorna dir\n");
                 aux = retorna_dir(aux);
             }
-            if(retorna_esq(aux) == NULL && retorna_dir(aux) == NULL){
-                printf("entrei no retorna folha = ");
+            if(eh_folha(aux)){
                 l = retorna_caractere(aux);
-                printf("%c\n", l);
+                printf("entrei no retorna folha = %c, ", l);                
                 fwrite(&l,sizeof(unsigned char), 1, descompactado);
                 printf("pos = %ld\n", ftell(fp));
                 aux = reconst;                
@@ -61,6 +64,7 @@ int main(int argc, char const *argv[]) {
         }        
         // printf("\n");
     }
+    printf("\ncont = %d\n", cont);
         printf("tell = %ld\n", ftell(fp));
     // escrever no arquivo    
     // fclose(descompactado);
