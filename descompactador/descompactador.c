@@ -128,12 +128,12 @@ Arv* reconstroi_arv (bitmap*  bm, int* i)
   if (bit == 1)
   {  
     (*i)++;
-    unsigned char vet[8], letra;
+    unsigned char vet[8], letra; // vetor p armazenar o codigo do caractere
     for(int j = *i + 7; j >= *i; j--){
         vet[j - *i] = (bitmapGetBit(*bm,j) & 1);                
     }
     unsigned char aux = 0;
-    for (int k = 0; k < 8; k++){
+    for (int k = 0; k < 8; k++){ // transformar o vetor em um caractere com o codigo do vetor
         aux = aux << 1;
         aux = aux | vet[k];
     }
@@ -151,31 +151,8 @@ Arv* reconstroi_arv (bitmap*  bm, int* i)
   }
 }
 
-// unsigned char busca_folha(Arv* a, bitmap* bm, int* i){  
-//   unsigned char bit = bitmapGetBit(*bm,*i);
-//   if(a != NULL){
-//     if(eh_folha(a)){
-//       unsigned char aux = 0;
-//       for (int k = 0; k < 8; k++){
-//           aux = aux << 1;
-//           aux = aux | a->c;
-//       }
-//       return aux;
-//     }
-//     if(i == 0){
-//       busca_folha(a->esq);
-//     }
-//     if(i == 1){
-//       busca_folha(a->dir);
-//     }
-//   }
-  
-// }
-
 Arv* percorre(Arv* a, int i){    
-  if(a != NULL){
-    if(eh_folha(a))
-        return a;
+  if(a != NULL){    
     if(i == 0)
         return a->esq;
 
