@@ -63,15 +63,12 @@ int main(int argc, char const *argv[]) {
     }
     printf("\ncont = %d\n", cont);
         printf("tell = %ld\n", ftell(fp));
-    // escrever no arquivo    
+    // escrever no arquivo
+    fclose(fp);
+    arv_libera(reconst);
+    free(bitmapGetContents(bm));    
     fclose(descompactado);
-    // int i;
-    // for (i=0; i< bitmapGetLength(bm); i++) {      
-	//   printf("bit #%d = %0xh\n", i, bitmapGetBit(bm, i));
-	// }
-    // printf("%d\n",bitmapGetLength(bm));
-    // printf("FIM DO DEBUG BITMAP\n");
-    // printf("%d\n", n);
+    
     }
     
     return 0;

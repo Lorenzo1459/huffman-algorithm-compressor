@@ -71,27 +71,8 @@ int eh_folha(Arv* a){
   }
 }
 
-// int arv_mapeia(Arv* a, bitmap* bm, char* str){  
-//   if (!arv_vazia(a)) {
-//     if(a->esq != NULL){
-//       // bitmapAppendLeastSignificantBit(bm, 0);
-      
-//       arv_mapeia(a->esq, bm);
-//     }
-//     if(a->dir != NULL){            
-//       // bitmapAppendLeastSignificantBit(bm, 1);
-//       arv_mapeia(a->dir, bm);
-//     }
-//     if(eh_folha(a)){                  
-//       for(int i = 7; i >= 0; i--){
-//         // bitmapAppendLeastSignificantBit(bm, (a->c >> i) & 1); // dá append em cada bit do caractere de dado nó no bitmap
-//       }
-//     }    
-//   }  
-// }
-
-void arv_mapeia(Arv* a, int i, char* posicao, char** asc){ // i sempre será 1 na chamada  
-  //botar 1 no começo depois * por 10 se for pra esquerda e por 10 + 1 pra direita
+void arv_mapeia(Arv* a, int i, char* posicao, char** asc){ 
+ 
   if (!arv_vazia(a)) {
     if(a->esq != NULL){ //coloca 0 se for pra esquerda      
       posicao[i]='0';
@@ -109,10 +90,7 @@ void arv_mapeia(Arv* a, int i, char* posicao, char** asc){ // i sempre será 1 n
     
     if(eh_folha(a)){      
       posicao[i]='\0';
-      // printf("%c -> ",a -> c);      
-      // printf("%s\n",posicao);
       unsigned char aux = a->c;                  
-      // asc[aux] = (char*)malloc(sizeof(posicao));
       strcpy(asc[aux],posicao);
     }
   }
@@ -205,8 +183,9 @@ Arv* Retira_lista (TipoLista* lista, Arv* arv){
 
   if (ant == NULL) { //Caso da remoçao do primeiro
     Arv* retirado = aux->arvore_lista;
-    // printf(">>>>>%c\n", retirado->c);
+    ant= lista->inicio;
     lista->inicio = aux->prox;
+    free(ant);
     // printf("------------------------REMOCAO PRIMEIRO ELEMENTO------------------------\n");
     return retirado;
   }
@@ -234,11 +213,13 @@ TipoLista* LiberaLista (TipoLista* lista){
   TCelula* aux = lista->inicio;
   while (aux != NULL) {
     TCelula* aux2 = aux->prox;
-    free(aux->arvore_lista);
+    arv_libera(aux->arvore_lista);
     free(aux);
     aux = aux2;
   }
+  free(aux);
   free(lista);
+  
   return NULL;
 }
 
@@ -299,12 +280,13 @@ TipoLista* Alg_HuffmanComp(TipoLista* lista){ // usando huffman recursivamente a
   }
 }
 TipoLista* Alg_Huffman1rep(TipoLista* lista){
+ 
   Arv* t1 = lista->inicio->arvore_lista; //primeiro elemento da lista
   Arv* t2 = lista->inicio->prox->arvore_lista; // segundo elemento da lista
   int novopeso = t1->peso + t2->peso; // peso da nova arvore
   Arv* tr = arv_cria('z',novopeso,t1,t2); // nova arvore com os elementos acima
-  Retira_lista(lista, t2); // remove 2 elemento
   Retira_lista(lista, t1); // remove 1 elemento
+  Retira_lista(lista, t2); // remove 2 elemento
   Insere_lista(tr,lista); // adiciona nova arvore ao final da lista
 }
 //FIM DAS FUNCOES ESPECIFICAS

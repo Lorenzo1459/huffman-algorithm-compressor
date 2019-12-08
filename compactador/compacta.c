@@ -27,21 +27,16 @@ int main(int argc, char const *argv[]) {
   TipoLista* ListaDeArvores = InicializaLista(); //criando lista para armazenar as arvores
   for (int i = 0; i < 256; i++) { // filtrando o loop para caracteres visiveis
     if (VetorASC[i] > 0) { // filtrando para caracteres com pelo menos 1 aparicao no texto
-      // printf("posicao %d -> %d\n",i,VetorASC[i]);
       Insere_lista(arv_cria((char)i,VetorASC[i],NULL,NULL),ListaDeArvores);
       // ^ criando uma arvore com o caractere e seu respectivo peso
       //E inserindo na lista de arvores
     }
   }  
-  // printf("-------------ANTES DE HUFFMAN--------------\n");
+
   bubbleSort(retorna_inicio_lista(ListaDeArvores));
-  // ImprimeLista(ListaDeArvores); // debug pré huffman
-  // printf("fim da imprime lista pré huffman\n");
-  // printf("-------------DEPOIS DE HUFFMAN-------------\n");
+
   Alg_HuffmanComp(ListaDeArvores);  //processo de aplicacao de huffman
   Arv* arv_otima = RetornaArvoreOtima(ListaDeArvores); // pega a primeira arvore da lista (depois de huffman a unica arvore da lista é a arvore otima)
-  // arv_imprime(arv_otima); // debug pós huffman (arvore otima)
-  // printf("fim da imprime lista pós huffman\n");
 
   bitmap bm = bitmapInit(4096);  
 
@@ -78,12 +73,13 @@ int main(int argc, char const *argv[]) {
   fwrite(bitmapGetContents(bm),sizeof(unsigned char),Tamanho_serializacao,compactado);  // escreve a serializacao da arvore no arquivo binario  
   
   free(bitmapGetContents(bm)); // libera o bitmap
+  
   bm = bitmapInit(4096); // reinicia o bitmap para continuar a codificacao
   char c2;
   while (!feof(fp)) { // percorrendo o arquivo a ser compactado
       c2 = fgetc(fp);
       unsigned char aux = c2;      
-      // printf("%c", c2);
+
       for(int i = 0; i <= strlen(VetASC[aux]) - 1; i++){
         if(bitmapGetLength(bm) == bitmapGetMaxSize(bm)){
           //ESVAZIAR BITMAP
@@ -91,26 +87,26 @@ int main(int argc, char const *argv[]) {
           free(bitmapGetContents(bm)); // libera o bitmap                 
           bm = bitmapInit(4096); // reinicia o bitmap para continuar a codificacao
         }        
-        // printf("%s - ",VetASC[aux]);
-        // printf("%c - ", VetASC[aux][i]);        
-        // printf("debug ------- %c\n", ((unsigned char)VetASC[aux][i]));
+
         bitmapAppendLeastSignificantBit(&bm, ((unsigned char)VetASC[aux][i])); // dá append em cada bit do caminho ate alcançar o caractere lido (armazenado em VetASC)
       }
-      // printf("---------------------------------------\n");
+
     }    
     fwrite(bitmapGetContents(bm),sizeof(unsigned char),(bitmapGetLength(bm)+7)/8,compactado); // escrevo o que sobrou do bitmap
     free(bitmapGetContents(bm));  // libera o bitmap
     bm = bitmapInit(1024);
     fclose(fp);  
   
-
-    // printf("DEBUG BITMAP\n");  
-    // int i;
-    // for (i=0; i< bitmapGetLength(bm); i++) {      
-		//   printf("bit #%d = %0xh\n", i, bitmapGetBit(bm, i));
-	  // }
     printf("%d\n",bitmapGetLength(bm));
-    // printf("FIM DO DEBUG BITMAP\n");
-    // printf("%d\n", n);
+ 
+    
+    //libera as estruturas
+    for(int g=0;g<256;g++){
+      free(VetASC[g]);
+    }
+    free(VetASC); 
+    fclose(compactado);
+    free(bitmapGetContents(bm));
+    LiberaLista(ListaDeArvores);
   return 0;
 }
