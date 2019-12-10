@@ -52,9 +52,9 @@ int main(int argc, char const *argv[]) {
 
   rewind(fp); //resetando ponteiro do arquivo para o inicio
   // n = 0; 
-  FILE* compactado = fopen("arquivo.comp","wb");
+  FILE* compactado = fopen(strcat(argv[1],".comp"),"wb");
 
-  arv_cabecalho(arv_otima, &bm, compactado);  // prepara a serializacao da arvore, que sera escrita no cabecalho
+  arv_cabecalho(arv_otima, &bm);  // prepara a serializacao da arvore, que sera escrita no cabecalho
   printf("length ========= %d\n",bitmapGetLength(bm));
 
   int byteaux;

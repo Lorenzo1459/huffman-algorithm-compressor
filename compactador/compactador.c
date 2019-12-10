@@ -98,7 +98,7 @@ void arv_mapeia(Arv* a, int i, char* posicao, char** asc){
 }
 
 
-void arv_cabecalho(Arv* a, bitmap* bm, FILE* saida){
+void arv_cabecalho(Arv* a, bitmap* bm){
   if(!arv_vazia(a)){
     if(eh_folha(a)){      
       bitmapAppendLeastSignificantBit(bm, 1);      
@@ -108,8 +108,8 @@ void arv_cabecalho(Arv* a, bitmap* bm, FILE* saida){
     }
     else{
       bitmapAppendLeastSignificantBit(bm, 0);
-      arv_cabecalho(a->esq, bm, saida);
-      arv_cabecalho(a->dir, bm, saida);
+      arv_cabecalho(a->esq, bm);
+      arv_cabecalho(a->dir, bm);
     }
   }
 }

@@ -1,11 +1,13 @@
 #include "descompactador.h" 
 #include "bitmap.h"
+#include<string.h>
 
 int main(int argc, char const *argv[]) {
     short int n;
     char lixo;        
     char c; // aux do ponteiro de arquivo
     bitmap bm = bitmapInit(4096);
+    char nomeArquivo[20];
     FILE* fp = fopen(argv[1],"rb"); //abrindo arquivo    
     if(fp != NULL){        
         fread(&n,sizeof(short int),1,fp); // le o num de bytes de cabecalho
@@ -31,7 +33,16 @@ int main(int argc, char const *argv[]) {
     free(bitmapGetContents(bm));
     bm = bitmapInit(4096); // reinicia o bitmap p/ leitura da codificacao    
 
-    FILE* descompactado = fopen("descompactado","w");    
+
+    nomeArquivo[0]='\0';
+    //desconcatena o .comp do nome do arquivo
+    strncpy(nomeArquivo,argv[1],strlen(argv[1])-5);
+    if((nomeArquivo[strlen(nomeArquivo)-1]) == '@'){// exessão pois por algum motivo alguns arquivos ficam com um @ no fim
+        nomeArquivo[strlen(nomeArquivo)-1]='\0';
+    }
+
+    
+    FILE* descompactado = fopen(nomeArquivo,"w");    
     char l;
     Arv* aux = reconst;    
     int cont = 0;
